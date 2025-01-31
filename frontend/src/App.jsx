@@ -1,5 +1,8 @@
 import { useState } from 'react'
-import analyzeSentiment from './services/sentiment-service'
+import postText from './services/sentiment-service'
+import ReviewArea from './components/ReviewArea'
+import ModelSelector from './components/ModelSelector'
+import AnalyzeButton from './components/AnalyzeButton'
 
 function App() {
   const [text, setText] = useState('')
@@ -8,13 +11,14 @@ function App() {
   const [loading, setLoading] = useState(false)
 
   const handleAnalyze = async () => {
+    // no empty texts
     if (!text.trim()) {
       alert('Please enter some text')
       return
     }
 
     setLoading(true)
-    const response = await analyzeSentiment(text, model)
+    const response = await postText(text, model)
     setLoading(false)
 
     if (response.error) {
@@ -28,26 +32,9 @@ function App() {
     <div style={{ maxWidth: '500px', margin: 'auto', textAlign: 'center', padding: '20px' }}>
       <h2>Sentiment Analyzer</h2>
 
-      <textarea
-        value={text}
-        onChange={(e) => setText(e.target.value)}
-        placeholder="Enter text here..."
-        rows="4"
-        style={{ width: '100%', marginBottom: '10px', padding: '5px' }}
-      />
-
-      <select
-        value={model}
-        onChange={(e) => setModel(e.target.value)}
-        style={{ width: '100%', padding: '5px', marginBottom: '10px' }}
-      >
-        <option value="custom">Custom Model</option>
-        <option value="llama">Llama 3</option>
-      </select>
-
-      <button onClick={handleAnalyze} disabled={loading} style={{ width: '100%', padding: '10px', fontWeight: 'bold' }}>
-        {loading ? 'Analyzing...' : 'Analyze Sentiment'}
-      </button>
+      <ReviewArea text={text} setText={setText} />
+      <ModelSelector model={model} setModel={setModel} />
+      <AnalyzeButton handleAnalyze={handleAnalyze} loading={loading} />
 
       {result && (
         <div style={{ marginTop: '20px', padding: '10px', border: '1px solid #ccc', borderRadius: '5px' }}>
