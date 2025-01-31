@@ -1,8 +1,8 @@
-## Week 3 technical exercise for the COMP.CS.530-2024-2025-1 Fine-tuning Large Language Models (LLM)
+# Week 3 technical exercise for the COMP.CS.530-2024-2025-1 Fine-tuning Large Language Models (LLM)
 
 This is a monorepo holding the python flask app for sentiment analysis with a react frontend. It also holds the google colab notebook for week 3. To be noted, the notebook is not compatible with the virtual env and the environment variables; it is made to be run in google colab with appropriate secrets.
 
-# Installation
+## Installation
 
 To run the app, you just need to set up the python backend - fronend is built to the static "dist" folder.
 
@@ -34,14 +34,14 @@ After tweaking, just run
 
 .. and copy with overwrite the "dist" folder in the project root with the frontend "dist folder. This enables the Flask app to serve these files as static files.
 
-# Entry points
+## Entry points
 
 Other entry points than the already mentioned app.py are:
 
 test_groq.py - this is for testing the backend as the exercise required and testing the keys etc...
 week3_technical_assignment_SL.ipynb - the Jupyter notebook required to be in the repo too. <b>This does not run with the requirements.txt modules, you have to install more. For Colab!</b>
 
-# Important notes
+## Important notes
 
 The Jupyter notebook requires you to set certain secrets in your Colab and allow access to them from the notebook.
 The assignment wanted, that the dataset is loaded from Kaggle, so I think you need Kaggle authentication (the JSON file...)
