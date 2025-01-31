@@ -1,4 +1,5 @@
 import os
+import requests
 
 from groq import Groq
 
@@ -26,9 +27,13 @@ print(f"Positive in answer {'positive' in answer.lower()}")
 print(f"Negative in answer {'negative' in answer.lower()}")
 print("Answer: ", answer)
 
-from huggingface_hub import HfApi
+response = requests.post("http://127.0.0.1:5000/analyze/", json={ "text" : "I love this movie", "model" : "custom" })
 
-api = HfApi()
-model_info = api.model_info("kelmeilia/wk3ex_bert_imdb_sentiment")
-
-print(model_info)
+if response.status_code == 200:
+    print("Success!")
+    print(response.json())  
+elif response.status_code == 400:
+    print("Bad Request:", response.text) 
+else:
+    print(f"Error: Status code {response.status_code}")
+    print(response.text) 
