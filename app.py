@@ -16,7 +16,7 @@ def analyze():
     if model not in {"custom", "llama"}:
         return jsonify({"error": "Invalid model specified"}), 400
 
-    sentiment, conf = analyze.predict(text, model)      
+    sentiment, conf = analyzer.predict(text, model)      
     return jsonify({"sentiment": sentiment, "confidence" : conf})
 
 if __name__ == '__main__':

@@ -6,8 +6,9 @@ from groq import Groq
 class Analyzer():
     def __init__(self):
         self._custom_model = None
-        model_name = "kelmeilia/results"  
-        self._classifier = pipeline("text-classification", model=model_name)
+        hf_token = os.getenv("HF_HUB_TOKEN")
+        model_name = "kelmeilia/wk3ex_bert_imdb_sentiment"  
+        self._classifier = pipeline("text-classification", model=model_name, token=hf_token)
         self._client = Groq(api_key=os.environ.get("GROQ_API_KEY"))
 
     def wrap_prompt(self, text : str) -> str:
@@ -22,7 +23,15 @@ class Analyzer():
 
     def predict(self, text : str, model : str) -> tuple:
         if model == "custom":
-            sentiment, confidence = self._classifier(text)
+            prediction = self._classifier(text)
+            # print(prediction)
+            confidence = prediction[0]["score"]
+            if prediction[0]["label"] == "LABEL_1":
+                sentiment = "positive"
+            elif prediction[0]["label"] == "LABEL_0":
+                sentiment = "negative"
+            else:
+                raise ValueError("Model did a crazy value!")
         elif model == "llama":
             print("Need to use Groq")
             chat_completion = self._client.chat.completions.create(

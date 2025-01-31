@@ -25,3 +25,10 @@ answer = chat_completion.choices[0].message.content
 print(f"Positive in answer {'positive' in answer.lower()}")
 print(f"Negative in answer {'negative' in answer.lower()}")
 print("Answer: ", answer)
+
+from huggingface_hub import HfApi
+
+api = HfApi()
+model_info = api.model_info("kelmeilia/wk3ex_bert_imdb_sentiment")
+
+print(model_info)
