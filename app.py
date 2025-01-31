@@ -1,22 +1,9 @@
+import os
+
 from flask import Flask, request, jsonify
+from analyzer import Analyzer
 
 app = Flask(__name__)
-
-def analyze_sentiment_custom(text):
-    """Simple rule-based sentiment analysis."""
-    positive_words = {"good", "happy", "great", "excellent", "awesome"}
-    negative_words = {"bad", "sad", "terrible", "awful", "worst"}
-    
-    words = set(text.lower().split())
-    if words & positive_words:
-        return "positive"
-    elif words & negative_words:
-        return "negative"
-    return "neutral"
-
-def analyze_sentiment_llama(text):
-    """Placeholder function for Llama-based sentiment analysis."""
-    return "positive" if "good" in text.lower() else "negative"
 
 @app.route('/analyze/', methods=['POST'])
 def analyze():
@@ -28,15 +15,11 @@ def analyze():
         return jsonify({"error": "Text parameter is required"}), 400
     if model not in {"custom", "llama"}:
         return jsonify({"error": "Invalid model specified"}), 400
-    
-    if model == "custom":
-        sentiment = analyze_sentiment_custom(text)
-    else:
-        sentiment = analyze_sentiment_llama(text)
-    
-    return jsonify({"sentiment": sentiment})
+
+    sentiment, conf = analyze.predict(text, model)      
+    return jsonify({"sentiment": sentiment, "confidence" : conf})
 
 if __name__ == '__main__':
-    import os
+    analyzer = Analyzer()
     port = int(os.getenv("PORT", 5000))
     app.run(debug=True, port=port)
