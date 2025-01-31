@@ -1,13 +1,20 @@
 import os
 
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 from analyzer import Analyzer
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder="dist", static_url_path="/")
 
 CORS(app)
 
+# Serve the React frontend
+@app.route('/')
+@app.route('/<path:path>')
+def serve_frontend(path="index.html"):
+    return send_from_directory(app.static_folder, path)
+
+# Serve sentiment analysis
 @app.route('/analyze/', methods=['POST'])
 def analyze():
     data = request.json
